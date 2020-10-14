@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/dannytracy19/426finalproject/issues"
   },
-  "homepage": "https://github.com/dannytracy19/426finalproject#readme"
+  "homepage": "https://github.com/dannytracy19/426finalproject#readme",
+  "dependencies": {
+    "bulma": "^0.9.1"
+  }
 }
