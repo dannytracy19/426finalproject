@@ -16,9 +16,12 @@
             <div class="field">
                 <label class="label">Email</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="johndoe1@gmail.com" name="username">
+                    <input class="email-input" type="text" placeholder="johndoe1@gmail.com" name="username">
                 </div>
             </div>
+
+            <!---
+
             <div class="field">
                 <label class="label">Username</label>
                 <div class="control">
@@ -43,6 +46,8 @@
                     <input class="input" type="address" placeholder="123 Cherry Lane" name="address">
                 </div>
             </div>
+            -->
+
             <div class="field">
                 <div class="control">
                     <a class="button is-dark" href="index.html">Back</a>
@@ -53,8 +58,23 @@
                     <a class="button is-dark" href="favfoodssignup.html">Next</a>
                 </div>
             </div>
+            <div class="field">
+                <div class="control">
+                    <button class = "button is-dark submit" type="submit">Submit</button>
+                    <!--
+                    <a class="button is-dark" href="favfoodssignup.html">Next</a>
+                    -->
+                </div>
+            </div>
         </form>
     </div>
 </section>
+
+<!-- Links to JavaScript files below -->
+<script src="node_modules/jquery/dist/jquery.js"></script>
+<script src='sign_up.js'></script>
+<script src="node_modules/axios/dist/axios.js"></script>
+
+
 </body>
 </html>
