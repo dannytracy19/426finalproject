@@ -7,6 +7,7 @@ class User {
     constructor(id, email){
         this.id = id;
         this.email = email;
+        this.preferences = preferences;
     }
 
 };
@@ -42,6 +43,11 @@ User.create = (email) => {
    let user = new User(id, email);
    user_data.set(user.id.toString(), user);
    return user;
+}
+
+User.addPreferences = (preferences, id) => {
+        let u = User.findByID(id);
+        u.prefernces = preferences;
 }
 
 module.exports = User;

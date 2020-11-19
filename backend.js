@@ -42,6 +42,18 @@ app.post('/', (req, res) => {
 
 });
 
+app.post('/preferences', (req, res) => {
+    let {preferences} = req.body;
+    //console.log(req);
+    let user = User.findByID(req.params.id);
+    if (user==null){
+        res.status(400).send("Bad Request");
+        return;
+    }
+    user.addPreferences(preferences, req.params.id);
+    return res.json(user);
+});
+
 // app.delete('/book/:id', (req, res) => {
 //     let u = User.findByID(req.params.id);
 //     if (u == null) {
