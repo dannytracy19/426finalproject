@@ -39,9 +39,13 @@ Meetup.next_id=Meetup.getAllIDs().reduce((max, next_id) => {
 
 Meetup.create = (address1, address2, meettype, stars, price) => {
     //finding max id, add 1 to it to get new id
-   let id = Meetup.next_id;
-   Meetup.next_id +=1;
-   let meetup = new Meetup(id, address1, address2, meettype, stars, price);
-   meetup_data.set(meetup.id.toString(), meetup);
-   return meetujp;
+    console.log("in meetup function")
+    let id = Meetup.next_id;
+    Meetup.next_id +=1;
+    let meetup = new Meetup(id, address1, address2, meettype, stars, price);
+    meetup_data.set(meetup.id.toString(), meetup);
+
+    return meetup;
 }
+
+module.exports = Meetup;

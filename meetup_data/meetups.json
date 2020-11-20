@@ -1,0 +1,10 @@
+{
+  "0": {
+    "id": 0,
+    "address1": "1234 Main St. Town, State Zip",
+    "address2": "1234 Main St. Town, State Zip",
+    "meettype": "Restaurant",
+    "stars": "2",
+    "price": "$$$"
+  }
+}
