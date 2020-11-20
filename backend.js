@@ -4,7 +4,9 @@ const express = require('express');
 //executing method
 const app = express();
 
-const User = require('./User.js')
+const User = require('./User.js');
+
+const Meetup = require('./Meetup.js');
 
 const bodyparser = require('body-parser');
 
@@ -39,6 +41,18 @@ app.post('/', (req, res) => {
         return;
     }
     return res.json(u);
+
+});
+app.post('/meetups', (req, res) => {
+    let {address1, address2, meettype, stars, price} = req.body;
+    console.log(req.body);
+    
+    let m = Meetup.create(address1, address2, meettype, stars, price);
+    if (m==null){
+        res.status(400).send("Bad Request");
+        return;
+    }
+    return res.json(m);
 
 });
 
