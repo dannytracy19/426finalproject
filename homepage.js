@@ -11,19 +11,66 @@ const handleMeetup = function(event){
     let stars = $('input:radio[name=stars]:checked').val();
     let price = $('input:radio[name=price]:checked').val();
 
+    console.log(meettype);
+
+    let request;
+
+    if(meettype == "Restaurant") {
+        request = {
+            location: new google.maps.LatLng(35.9132, -79.0558),
+            radius: 1000,
+            keyword: 'food',
+            type: 'restaraunt'
+        };
+    } else if( meettype == "Mall/Shopping Center") {
+        request = {
+            location: new google.maps.LatLng(35.9132, -79.0558),
+            radius: 1000,
+            keyword: 'shopping',
+            type: "shopping_mall"
+        };
+    } else if(meettype == "Retail Shop") {
+        request = {
+            location: new google.maps.LatLng(35.9132, -79.0558),
+            radius: 1000,
+            keyword: 'shopping',
+            type: "store"
+        };
+    } else if(meettype == "Recreation") {
+        request = {
+            location: new google.maps.LatLng(35.9132, -79.0558),
+            radius: 1000,
+            keyword: 'recreation',
+            type: "park"
+        };
+    } else if (meettype == "Movie") {
+        request = {
+            location: new google.maps.LatLng(35.9132, -79.0558),
+            radius: 1000,
+            keyword: 'movies',
+            type: "movie_theatre"
+        };
+    } else {
+        request = {
+            location: new google.maps.LatLng(35.9132, -79.0558),
+            radius: 1000,
+            keyword: 'shopping',
+            type: "store"
+        };
+    };
+
     let map = $("<div/>", {html: `<div id="meet-map"></div>
                             <div id="right-panel">
                             <h2>Results</h2>
                             <ul id="places"></ul>
-                            <button id="more">More results</button>
                             </div>`});
 
     $('#setup-meet').replaceWith(map);
 
-    handleCreateMap();
+    handleCreateMap(request);
 
     //let preferences = 'meat'
-
+/*
     const result = axios({
         method: 'post',
         url: 'http://localhost:3030/meetups',
@@ -35,17 +82,17 @@ const handleMeetup = function(event){
             "price": price
         }
     })
-
+*/
   //window.location.href = "homepage.html";
 
     
 }
 
-const handleCreateMap = function(){
-    initMap();
+const handleCreateMap = function(meeting_place){
+    initMap(meeting_place);
 }
 
-function initMap() {
+function initMap(request) {
     // Create the map.
     const chapel_hill = { lat: 35.9132, lng: -79.0558 };
     const map = new google.maps.Map(document.getElementById("meet-map"), {
@@ -56,20 +103,31 @@ function initMap() {
     // Create the places service.
     const service = new google.maps.places.PlacesService(map);
     let getNextPage;
-    const moreButton = document.getElementById("more");
+    //const moreButton = document.getElementById("more");
   
-    moreButton.onclick = function () {
+    /*moreButton.onclick = function () {
         moreButton.disabled = true;
     
         if (getNextPage) {
             getNextPage();
         }
-    };
+    };*/
+
+    service.search(request, (results, status, pagination) => {
+        if (status !== "OK") {console.log("error"); return;}
+        createMarkers(results, map);
+        moreButton.disabled = !pagination.hasNextPage;
+
+        if (pagination.hasNextPage) {
+        getNextPage = pagination.nextPage;
+        }
+    })
+/*
     // Perform a nearby search.
     service.nearbySearch(
-        { location: chapel_hill, radius: 400, type: "store" },
+        { location: chapel_hill, radius: 1000, type: meeting_place},
         (results, status, pagination) => {
-            if (status !== "OK") return;
+            if (status !== "OK") {console.log("error"); return;}
             createMarkers(results, map);
             moreButton.disabled = !pagination.hasNextPage;
     
@@ -77,19 +135,21 @@ function initMap() {
             getNextPage = pagination.nextPage;
             }
         }
-    );
+    );*/
 }
 
 function createMarkers(places, map) {
     const bounds = new google.maps.LatLngBounds();
     const placesList = document.getElementById("places");
 
+    console.log(placesList)
+
     for (let i = 0, place; (place = places[i]); i++) {
         const image = {
             url: place.icon,
-            size: new google.maps.Size(20, 20),
+            size: new google.maps.Size(50, 50),
             origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(10, 20),
+            anchor: new google.maps.Point(18, 34),
             scaledSize: new google.maps.Size(25, 25),
         };
         new google.maps.Marker({
@@ -97,7 +157,7 @@ function createMarkers(places, map) {
             icon: image,
             title: place.name,
             position: place.geometry.location,
-        });
+        }).addListener('click', () => { handleMeetingPlace(event)});
         const li = document.createElement("li");
         li.textContent = place.name;
         placesList.appendChild(li);
@@ -106,10 +166,6 @@ function createMarkers(places, map) {
     map.fitBounds(bounds);
 }
 
-$(function() {
-    $(`#li`).on('click', handleMeetingPlace)
-})
-
-const handleMeetingPlace = function() {
-    console.log("choosing");
+function handleMeetingPlace(e) {
+    console.log(e["path"][1]['title']);
 }
