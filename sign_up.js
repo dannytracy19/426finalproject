@@ -5,13 +5,26 @@
 
 const handleSubmit = function(event){
     event.preventDefault();
-    email = $(".email-input").val();
+    let email = $(".email-input").val();
+
+
+    let preferences = []
+    $('#div_checkboxes :checked').each(function(){
+        preferences.push($(this).val());
+    })
+
+ 
+
+
+
+    //let preferences = 'meat'
 
     const result = axios({
         method: 'post',
         url: 'http://localhost:3030/',
         data:{
-            "email":email
+            "email":email,
+            "preferences": preferences
         }
     })
 

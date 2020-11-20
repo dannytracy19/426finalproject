@@ -4,7 +4,7 @@ const axios = require('axios').default;
 
 class User {
 
-    constructor(id, email){
+    constructor(id, email, preferences){
         this.id = id;
         this.email = email;
         this.preferences = preferences;
@@ -36,18 +36,18 @@ User.next_id=User.getAllIDs().reduce((max, next_id) => {
     return max;
 }, -1) + 1;
 
-User.create = (email) => {
+User.create = (email, preferences) => {
     //finding max id, add 1 to it to get new id
    let id = User.next_id;
    User.next_id +=1;
-   let user = new User(id, email);
+   let user = new User(id, email, preferences);
    user_data.set(user.id.toString(), user);
    return user;
 }
 
 User.addPreferences = (preferences, id) => {
         let u = User.findByID(id);
-        u.prefernces = preferences;
+        u.preferences = preferences;
 }
 
 module.exports = User;

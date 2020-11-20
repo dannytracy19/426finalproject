@@ -30,10 +30,10 @@ app.get('/user:id', (req, res) => {
 
 
 app.post('/', (req, res) => {
-    let {email} = req.body;
-    //console.log(req);
+    let {email, preferences} = req.body;
+    console.log(req.body);
     
-    let u = User.create(email);
+    let u = User.create(email, preferences);
     if (u==null){
         res.status(400).send("Bad Request");
         return;
