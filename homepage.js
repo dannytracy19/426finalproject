@@ -1,4 +1,5 @@
 const handleMeetup = function(event){
+    console.log("something");
     event.preventDefault();
     let address1 = $('.address1').val();
     let address2 = $('.address2').val();
@@ -13,14 +14,14 @@ const handleMeetup = function(event){
         url: 'http://localhost:3030/meetups',
         data:{
             "address1": address1,
-            "address2": adress2,
+            "address2": address2,
             "meettype": meettype,
             "stars": stars,
             "price": price
         }
     })
 
-  window.location.href = "homepage.html";
+  //window.location.href = "homepage.html";
 
     
 }
