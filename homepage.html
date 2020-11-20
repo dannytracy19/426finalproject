@@ -42,7 +42,7 @@
 </section>
 
 <section class="section has-background-white">
-    <div class="container">
+    <div class="container" id="setup-meet">
         <div class="content">
             <div class="columns">
                 <div class="column">
@@ -114,7 +114,8 @@
                     </label>
                     <br>
                     <br>
-                    <button class="button is-dark meetup" href="map_result_display.html">Let's Meet!</button>
+                    <a class="button is-dark" id="meetup">Let's Meet!</a>
+                    <a class="button is-dark" href="map_result_display.html">test</a>
                 </div>
             </div>
         </div>
@@ -138,6 +139,12 @@
 <script src="node_modules/jquery/dist/jquery.js"></script>
 <script src='homepage.js'></script>
 <script src="node_modules/axios/dist/axios.js"></script>
-
+<!--3rd Part API links and ref-->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBonJqDqpoZ4ISXRDSfqChh_1a9T0902Gg&libraries=places&v=weekly"
+  defer
+></script>
+<link rel="stylesheet" type="text/css" href="./APIstyle.css" />
 </body>
 </html>
