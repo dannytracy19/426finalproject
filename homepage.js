@@ -1,9 +1,57 @@
 $(function() {
     $(`#meetup`).on("click", handleMeetup)
-    $('.addfriend').on("click", handlAddFriendPanel);
+    $('.addfriend').on("click", handleAddFriendPanel);
+    $('.addfav').on("click", handleAddFavoritePanel);
 });
 
-const handlAddFriendPanel = function (event){
+const handleAddFavoritePanel = function (event){
+    event.preventDefault();
+    let addfavoritepanel = 
+            `<div class = "favoritepanel">
+                <label class = "label" for = "favname">Location Name:</label>
+                <input class = "favname" type = "text" name = "favname" value = "Ex: Home">
+                <br>
+                <br>
+                <label class = "label" for = "favaddress">Address:</label>
+                <input class = "favaddress" type = "text" name = "favaddress" value = "1234 Main St. Town, State Zip">
+                <br>
+                <br>
+                <button class = "createfav button is-dark">Add</button>
+            </div>`
+    $('.addfav').replaceWith(addfavoritepanel);
+    $('.createfav').on("click", handleCreateFavorite);
+
+
+}
+const handleCreateFavorite = function(event){
+    event.preventDefault();
+    let favname = $('.favname').val();
+    let favaddress = $('.favaddress').val();
+    let favorite = 
+    `<div style = "display: inline-block; border: 2px solid powderblue; width: 100%; padding: 10px;">
+        <div style = "display: inline-block;">
+            <label class = "label">${favname}</label>
+            <label class = "${favaddress}" id = "${favaddress}">${favaddress}</label>
+        </div>
+        <br>
+        <br>
+        <div style = "display: inline-block;">
+            <button id = "${favaddress}" style = "display: inline-block;" class = "meetfav button is-dark">Meet!</button>
+        </div>
+    </div>`
+    $('#Favorites').append(favorite);
+    let replacementbutton = `<button class = "addfav button is-dark" style = "margin-left: 200px; margin-top: 10px; height: 75px; display: flex-right; justify-content: space-between;">Add a Favorite</button>`
+    $('.favoritepanel').replaceWith(replacementbutton);
+    $('.addfav').on("click", handleAddFavoritePanel);
+    $('.meetfav').on("click", handleMeetFavorite);
+
+}
+const handleMeetFavorite = function(event){
+    let newaddress = $('.autofilladdress').attr("id");
+    $('.address1').val(event.target.id);
+}
+
+const handleAddFriendPanel = function (event){
     event.preventDefault();
     let addfriendpanel = 
             `<div class = "friendpanel">
@@ -39,9 +87,9 @@ const handleCreateFriend = function(event){
         </div>
     </div>`
     $('#Friends').append(friend);
-    let replacementbutton = `<button class = "addfriend tablinks has-text-centered">Add a Friend</button>`
+    let replacementbutton = `<button class = "addfriend button is-dark" style = "margin-left: 250px; margin-top: 10px; height: 75px; display: flex-left; justify-content: space-between;">Add a Friend</button>`
     $('.friendpanel').replaceWith(replacementbutton);
-    $('.addfriend').on("click", handlAddFriendPanel);
+    $('.addfriend').on("click", handleAddFriendPanel);
     $('.meetfriend').on("click", handleMeetFriend);
 
 }
