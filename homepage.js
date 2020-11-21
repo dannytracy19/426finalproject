@@ -1,7 +1,55 @@
 $(function() {
     $(`#meetup`).on("click", handleMeetup)
+    $('.addfriend').on("click", handlAddFriendPanel);
 });
 
+const handlAddFriendPanel = function (event){
+    event.preventDefault();
+    let addfriendpanel = 
+            `<div class = "friendpanel">
+                <label class = "label" for = "friendname">Name:</label>
+                <input class = "friendname" type = "text" name = "friendname" value = "John Doe">
+                <br>
+                <br>
+                <label class = "label" for = "friendaddress">Address:</label>
+                <input class = "friendaddress" type = "text" name = "friendaddress" value = "1234 Main St. Town, State Zip">
+                <br>
+                <br>
+                <button class = "createfriend button is-dark">Add</button>
+            </div>`
+    $('.addfriend').replaceWith(addfriendpanel);
+    $('.createfriend').on("click", handleCreateFriend);
+
+
+}
+const handleCreateFriend = function(event){
+    event.preventDefault();
+    let friendname = $('.friendname').val();
+    let friendaddress = $('.friendaddress').val();
+    let friend = 
+    `<div style = "display: inline-block; border: 2px solid powderblue; width: 100%; padding: 10px;">
+        <div style = "display: inline-block;">
+            <label class = "label">${friendname}</label>
+            <label class = "${friendaddress}" id = "${friendaddress}">${friendaddress}</label>
+        </div>
+        <br>
+        <br>
+        <div style = "display: inline-block;">
+            <button id = "${friendaddress}" style = "display: inline-block;" class = "meetfriend button is-dark">Meet!</button>
+        </div>
+    </div>`
+    $('#Friends').append(friend);
+    let replacementbutton = `<button class = "addfriend tablinks has-text-centered">Add a Friend</button>`
+    $('.friendpanel').replaceWith(replacementbutton);
+    $('.addfriend').on("click", handlAddFriendPanel);
+    $('.meetfriend').on("click", handleMeetFriend);
+
+}
+
+const handleMeetFriend = function(event){
+    let newaddress = $('.autofilladdress').attr("id");
+    $('.address2').val(event.target.id);
+}
 const handleMeetup = function(event){
     console.log("something");
     event.preventDefault();
