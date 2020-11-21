@@ -98,6 +98,7 @@ const handleMeetFriend = function(event){
     let newaddress = $('.autofilladdress').attr("id");
     $('.address2').val(event.target.id);
 }
+
 const handleMeetup = function(event){
     console.log("something");
     event.preventDefault();
@@ -108,16 +109,54 @@ const handleMeetup = function(event){
     let price = $('input:radio[name=price]:checked').val();
 
     console.log(meettype);
+    console.log(price);
 
     let request;
 
     if(meettype == "Restaurant") {
-        request = {
-            location: new google.maps.LatLng(35.9132, -79.0558),
-            radius: 1000,
-            keyword: 'food',
-            type: 'restaraunt'
-        };
+        if (stars <= 1.5) {
+            request = {
+                location: new google.maps.LatLng(35.9132, -79.0558),
+                radius: 1000,
+                keyword: 'food',
+                type: 'restaraunt',
+                rating: 1.0
+            };
+        } else if (stars > 1.51 && stars <2.5) {
+            request = {
+                location: new google.maps.LatLng(35.9132, -79.0558),
+                radius: 1000,
+                keyword: 'food',
+                type: 'restaraunt',
+                rating: 2.0
+            };
+        } else if (stars > 2.51 && stars <3.5 && price == "$$$") {
+            console.log("here")
+            request = {
+                location: new google.maps.LatLng(35.9132, -79.0558),
+                radius: 1000,
+                keyword: 'food',
+                type: 'restaraunt',
+                rating: 3.0,
+                price_level: 3,
+            };
+        } else if (stars > 3.51 && stars <4.5) {
+            request = {
+                location: new google.maps.LatLng(35.9132, -79.0558),
+                radius: 1000,
+                keyword: 'food',
+                type: 'restaraunt',
+                rating: 4.0
+            };
+        } else {
+            request = {
+                location: new google.maps.LatLng(35.9132, -79.0558),
+                radius: 1000,
+                keyword: 'food',
+                type: 'restaraunt',
+                rating: 5.0
+            };
+        }
     } else if( meettype == "Mall/Shopping Center") {
         request = {
             location: new google.maps.LatLng(35.9132, -79.0558),
@@ -202,11 +241,14 @@ const handleCreateMap = function(meeting_place){
 function initMap(request) {
     // Create the map.
     const chapel_hill = { lat: 35.9132, lng: -79.0558 };
+    
     const map = new google.maps.Map(document.getElementById("meet-map"), {
         center: chapel_hill,
         zoom: 15,
+        clickableIcons: false,
     });
 
+    console.log(request)
     // Create the places service.
     const service = new google.maps.places.PlacesService(map);
     let getNextPage;
@@ -219,6 +261,9 @@ function initMap(request) {
             getNextPage();
         }
     };*/
+
+    service.search({location: new google.maps.LatLng(35.9132, -79.0558),
+                    radius: 1000, rating: 5,}, (results) => {console.log(results)})
 
     service.search(request, (results, status, pagination) => {
         if (status !== "OK") {console.log("error"); return;}
@@ -249,32 +294,57 @@ function createMarkers(places, map) {
     const bounds = new google.maps.LatLngBounds();
     const placesList = document.getElementById("places");
 
-    console.log(placesList)
+    let markers = []
 
     for (let i = 0, place; (place = places[i]); i++) {
+        //console.log(place)
         const image = {
-            url: 'map_marker_base-512.png',
-            size: new google.maps.Size(70, 70),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(3, 3),
-            scaledSize: new google.maps.Size(100, 100),
+            url: 'solid_blue.png',
+            size: new google.maps.Size(15, 15),
+            //origin: new google.maps.Point(5, 5),
+            //anchor: new google.maps.Point(10, 10),
+            scaledSize: new google.maps.Size(5, 5),
         };
 
-        $("#meet-map").append(new google.maps.Marker({
+        let marker = new google.maps.Marker({
             map,
             icon: image,
             title: place.name,
             position: place.geometry.location,
-        }).addListener('click', () => { handleMeetingPlace(event["path"][1]['title'])}));
+        }).addListener('click', () => { handleMeetingPlace(event["path"][1]['title'])});
+        markers.push(marker);
+
         const li = document.createElement("li");
-        li.addEventListener('click', (event) => { handleMeetingPlace(event['path'][0]['innerText'])});
+        li.addEventListener('click', (event) => { 
+            let solo_marker;
+            let mark = ''
+            console.log(event)
+            for(let h = 0; markers.length; h++) {
+                //mark = markers[h]['j']['title']
+                
+                if(event['path'][0]['innerText'] == mark) {
+                    solo_marker = markers[h];
+                }
+                //markers[h].setMap(null)
+            }
+            handleFindOnMap(solo_marker, map)});
+        
         li.textContent = place.name;
         placesList.appendChild(li);
         bounds.extend(place.geometry.location);
     }
-    map.fitBounds(bounds);
+    //map.fitBounds(bounds);
 }
 
 function handleMeetingPlace(place_name) {
     console.log(place_name);
+}
+
+function handleFindOnMap(marker, map) {
+    new google.maps.Marker({
+        map,
+        icon: marker['icon'],
+        title: marker['title'],
+        position: marker['position'],
+    }).addListener('click', () => { handleMeetingPlace(event["path"][1]['title'])});
 }
