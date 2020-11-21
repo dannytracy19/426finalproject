@@ -242,11 +242,11 @@ function createMarkers(places, map) {
 
     for (let i = 0, place; (place = places[i]); i++) {
         const image = {
-            url: place.icon,
+            url: 'map_marker_base-512.png',
             size: new google.maps.Size(70, 70),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(3, 3),
-            scaledSize: new google.maps.Size(1000, 1000),
+            scaledSize: new google.maps.Size(100, 100),
         };
 
         $("#meet-map").append(new google.maps.Marker({
@@ -254,8 +254,9 @@ function createMarkers(places, map) {
             icon: image,
             title: place.name,
             position: place.geometry.location,
-        }).addListener('click', () => { handleMeetingPlace(event)}));
+        }).addListener('click', () => { handleMeetingPlace(event["path"][1]['title'])}));
         const li = document.createElement("li");
+        li.addEventListener('click', (event) => { handleMeetingPlace(event['path'][0]['innerText'])});
         li.textContent = place.name;
         placesList.appendChild(li);
         bounds.extend(place.geometry.location);
@@ -263,6 +264,6 @@ function createMarkers(places, map) {
     map.fitBounds(bounds);
 }
 
-function handleMeetingPlace(e) {
-    console.log(e["path"][1]['title']);
+function handleMeetingPlace(place_name) {
+    console.log(place_name);
 }
