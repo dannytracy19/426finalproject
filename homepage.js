@@ -116,7 +116,7 @@ function initMap(request) {
     service.search(request, (results, status, pagination) => {
         if (status !== "OK") {console.log("error"); return;}
         createMarkers(results, map);
-        moreButton.disabled = !pagination.hasNextPage;
+        //moreButton.disabled = !pagination.hasNextPage;
 
         if (pagination.hasNextPage) {
         getNextPage = pagination.nextPage;
@@ -147,17 +147,18 @@ function createMarkers(places, map) {
     for (let i = 0, place; (place = places[i]); i++) {
         const image = {
             url: place.icon,
-            size: new google.maps.Size(50, 50),
+            size: new google.maps.Size(70, 70),
             origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(18, 34),
-            scaledSize: new google.maps.Size(25, 25),
+            anchor: new google.maps.Point(3, 3),
+            scaledSize: new google.maps.Size(1000, 1000),
         };
-        new google.maps.Marker({
+
+        $("#meet-map").append(new google.maps.Marker({
             map,
             icon: image,
             title: place.name,
             position: place.geometry.location,
-        }).addListener('click', () => { handleMeetingPlace(event)});
+        }).addListener('click', () => { handleMeetingPlace(event)}));
         const li = document.createElement("li");
         li.textContent = place.name;
         placesList.appendChild(li);
