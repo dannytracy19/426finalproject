@@ -181,7 +181,18 @@ const handleMeetup = function(event){
 */
   //window.location.href = "homepage.html";
 
-    
+    let meetuppanel = 
+        `<div class = "meetuppanel" style = "display: inline-block; border: 2px solid powderblue; width: 100%; padding: 10px;">
+            <h3 class = "label">You Meet Between: </h3>
+            <label>${address1}</label>
+            <h3 class = "label">and</h3>
+            <label>${address2}</label>
+            <h4 class = "label">With the following prefernces: </h4>
+            <label>${meettype}, </label>
+            <label>${stars}, </label>
+            <label">${price}</label>
+        </div>`
+        $('#Recents').append(meetuppanel);
 }
 
 const handleCreateMap = function(meeting_place){
