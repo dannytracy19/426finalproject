@@ -108,9 +108,6 @@ const handleMeetup = function(event){
     let stars = $('input:radio[name=stars]:checked').val();
     let price = $('input:radio[name=price]:checked').val();
 
-    console.log(meettype);
-    console.log(price);
-
     let request;
 
     if(meettype == "Restaurant") {
@@ -316,18 +313,19 @@ function createMarkers(places, map) {
 
         const li = document.createElement("li");
         li.addEventListener('click', (event) => { 
-            let solo_marker;
-            let mark = ''
-            console.log(event)
-            for(let h = 0; markers.length; h++) {
-                //mark = markers[h]['j']['title']
+            // let solo_marker;
+            // let mark = ''
+            // console.log(event)
+            // for(let h = 0; markers.length; h++) {
+            //     //mark = markers[h]['j']['title']
                 
-                if(event['path'][0]['innerText'] == mark) {
-                    solo_marker = markers[h];
-                }
-                //markers[h].setMap(null)
-            }
-            handleFindOnMap(solo_marker, map)});
+            //     if(event['path'][0]['innerText'] == mark) {
+            //         solo_marker = markers[h];
+            //     }
+            //     //markers[h].setMap(null)
+            // }
+            // handleFindOnMap(solo_marker, map)
+            handleMeetingPlace(event)});
         
         li.textContent = place.name;
         placesList.appendChild(li);
