@@ -2,6 +2,16 @@ $(function() {
     $(`#meetup`).on("click", handleMeetup)
     $('.addfriend').on("click", handleAddFriendPanel);
     $('.addfav').on("click", handleAddFavoritePanel);
+
+    const result = axios({
+        method: 'get',
+        url: 'http://localhost:3030/',
+        withCredentials: true
+    }).then(() => {
+        console.log('hello');
+    })
+
+
 });
 
 const handleAddFavoritePanel = function (event){
@@ -99,21 +109,93 @@ const handleMeetFriend = function(event){
     $('.address2').val(event.target.id);
 }
 
-const handleMeetup = function(event){
+const getMidpoint = function(lats, longs){
+
+    let sum_lats = 0;
+    let sum_longs = 0;
+
+    for (let i=0; i<lats.length; i++){
+        sum_lats = sum_lats + lats[i];
+        sum_longs = sum_longs + longs[i];
+
+    }
+    
+   
+
+    let avg_lat = sum_lats/(lats.length);
+    let avg_long = sum_longs/(longs.length);
+
+    let coords = [avg_lat, avg_long];
+    
+
+    return coords;
+
+    
+}
+
+const handleMeetup = async function(event){
     console.log("something");
     event.preventDefault();
-    let address1 = $('.address1').val();
-    let address2 = $('.address2').val();
+
+    let address1 = $('.streetname1').val() +",+"+$('.city1').val()+ ",+"+$('.state1').val();
+    let formatted_address1 = address1.replace(/ /g,'+')
+
+    let address2 = $('.streetname2').val() +", "+$('.city2').val()+ ", "+$('.state2').val();
+    let formatted_address2 = address2.replace(/ /g,'+')
+
     let meettype = $('input:radio[name=meetingplace]:checked').val();
     let stars = $('input:radio[name=stars]:checked').val();
     let price = $('input:radio[name=price]:checked').val();
+
+    let latitudes = [];
+    let longitudes = [];
+
+    const coords1 = await axios({
+        method: 'post',
+        //url: 'https://maps.googleapis.com/maps/api/geocode/json?address=425+Hillsborough+St,+Chapel+Hill,+NC&key=AIzaSyDqsQo7CiLijMo6QDo56K2Q_pvjb3-ImH4',
+        url: `https://maps.googleapis.com/maps/api/geocode/json?address=${formatted_address1}&key=AIzaSyDqsQo7CiLijMo6QDo56K2Q_pvjb3-ImH4`
+    }).then((results)=> {
+        let coords = results['data']['results'][0]['geometry']['location']
+        let lat1 = coords.lat;
+        latitudes.push(lat1);
+
+        let long1 = coords.lng;
+        longitudes.push(long1);
+
+    })
+
+    const coords2 = await axios({
+        method: 'post',
+        //url: 'https://maps.googleapis.com/maps/api/geocode/json?address=425+Hillsborough+St,+Chapel+Hill,+NC&key=AIzaSyDqsQo7CiLijMo6QDo56K2Q_pvjb3-ImH4',
+        url: `https://maps.googleapis.com/maps/api/geocode/json?address=${formatted_address2}&key=AIzaSyDqsQo7CiLijMo6QDo56K2Q_pvjb3-ImH4`
+    }).then((results)=> {
+        let coords = results['data']['results'][0]['geometry']['location']
+        let lat2 = coords.lat;
+        latitudes.push(lat2);
+
+        let long2 = coords.lng;
+        longitudes.push(long2);
+        
+    })
+
+    
+
+  
+
+    let mid_lat = getMidpoint(latitudes, longitudes)[0];
+    let mid_lng = getMidpoint(latitudes, longitudes)[1];
+
+    // console.log(lat);
+    // console.log(lng);
+
+
 
     let request;
 
     if(meettype == "Restaurant") {
         if (stars <= 1.5) {
             request = {
-                location: new google.maps.LatLng(35.9132, -79.0558),
+                location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
                 keyword: 'food',
                 type: 'restaraunt',
@@ -121,7 +203,7 @@ const handleMeetup = function(event){
             };
         } else if (stars > 1.51 && stars <2.5) {
             request = {
-                location: new google.maps.LatLng(35.9132, -79.0558),
+                location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
                 keyword: 'food',
                 type: 'restaraunt',
@@ -130,7 +212,7 @@ const handleMeetup = function(event){
         } else if (stars > 2.51 && stars <3.5 && price == "$$$") {
             console.log("here")
             request = {
-                location: new google.maps.LatLng(35.9132, -79.0558),
+                location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
                 keyword: 'food',
                 type: 'restaraunt',
@@ -139,7 +221,7 @@ const handleMeetup = function(event){
             };
         } else if (stars > 3.51 && stars <4.5) {
             request = {
-                location: new google.maps.LatLng(35.9132, -79.0558),
+                location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
                 keyword: 'food',
                 type: 'restaraunt',
@@ -147,7 +229,7 @@ const handleMeetup = function(event){
             };
         } else {
             request = {
-                location: new google.maps.LatLng(35.9132, -79.0558),
+                location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
                 keyword: 'food',
                 type: 'restaraunt',
@@ -156,35 +238,35 @@ const handleMeetup = function(event){
         }
     } else if( meettype == "Mall/Shopping Center") {
         request = {
-            location: new google.maps.LatLng(35.9132, -79.0558),
+            location: new google.maps.LatLng(mid_lat, mid_lng),
             radius: 1000,
             keyword: 'shopping',
             type: "shopping_mall"
         };
     } else if(meettype == "Retail Shop") {
         request = {
-            location: new google.maps.LatLng(35.9132, -79.0558),
+            location: new google.maps.LatLng(mid_lat, mid_lng),
             radius: 1000,
             keyword: 'shopping',
             type: "store"
         };
     } else if(meettype == "Recreation") {
         request = {
-            location: new google.maps.LatLng(35.9132, -79.0558),
+            location: new google.maps.LatLng(mid_lat, mid_lng),
             radius: 1000,
             keyword: 'recreation',
             type: "park"
         };
     } else if (meettype == "Movie") {
         request = {
-            location: new google.maps.LatLng(35.9132, -79.0558),
+            location: new google.maps.LatLng(mid_lat, mid_lng),
             radius: 1000,
             keyword: 'movies',
             type: "movie_theatre"
         };
     } else {
         request = {
-            location: new google.maps.LatLng(35.9132, -79.0558),
+            location: new google.maps.LatLng(mid_lat, mid_lng),
             radius: 1000,
             keyword: 'shopping',
             type: "store"
@@ -199,7 +281,7 @@ const handleMeetup = function(event){
 
     $('#setup-meet').replaceWith(map);
 
-    handleCreateMap(request);
+    handleCreateMap(request, mid_lat, mid_lng);
 
     //let preferences = 'meat'
 
@@ -231,13 +313,13 @@ const handleMeetup = function(event){
         $('#Recents').append(meetuppanel);
 }
 
-const handleCreateMap = function(meeting_place){
-    initMap(meeting_place);
+const handleCreateMap = function(meeting_place, mid_lat, mid_lng){
+    initMap(meeting_place, mid_lat, mid_lng);
 }
 
-function initMap(request) {
+function initMap(request, mid_lat, mid_lng) {
     // Create the map.
-    const chapel_hill = { lat: 35.9132, lng: -79.0558 };
+    const chapel_hill = { lat: mid_lat, lng: mid_lng };
     
     const map = new google.maps.Map(document.getElementById("meet-map"), {
         center: chapel_hill,
@@ -259,7 +341,7 @@ function initMap(request) {
         }
     };*/
 
-    service.search({location: new google.maps.LatLng(35.9132, -79.0558),
+    service.search({location: new google.maps.LatLng(mid_lat, mid_lng),
                     radius: 1000, rating: 5,}, (results) => {console.log(results)})
 
     service.search(request, (results, status, pagination) => {

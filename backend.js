@@ -11,22 +11,39 @@ const Meetup = require('./Meetup.js');
 const bodyparser = require('body-parser');
 
 app.use(bodyparser.json());
+// const cors = require('cors')
+// app.use(cors);
 
 const expressSession = require('express-session');
+
+// let session = {
+//     email: 'placeholder'
+// };
 
 app.use(expressSession({
     name: "SessionCookie",
     secret: "express session secret",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
 }));
+
+const cors = require('cors')
+
+app.use(cors({
+  origin:['http://localhost:3002'],
+  methods:['GET','POST'],
+  credentials: true
+}))
 
 
 
 //request, response
 //get all books by ID
-app.get('/user',(req, res) => {
-    res.json(User.getAllIDs());
+app.get('/',(req, res) => {
+    //console.log(session.email)
+    console.log("in the get")
+    console.log(req.session);
+    res.send("all good")
     return;
 });
 
@@ -60,8 +77,19 @@ app.post('/', (req, res) => {
         const user_password = users_db[user].password;
 
         if ((email == user_email) && (password == user_password)){
+
             console.log("auth!")
+            req.session.user = email;
+            
+            // session.email = req.session.user;
+
+
             res.send("authenticated!")
+
+            console.log("in the post")
+            console.log(req.session)
+
+            
             return;
         }
         
@@ -69,14 +97,9 @@ app.post('/', (req, res) => {
 
     res.status(404).send("Not found");
 
-    
-
-    
-
-
-
-
 })
+
+
 
 
 app.post('/signuppage', (req, res) => {

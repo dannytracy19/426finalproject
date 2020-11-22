@@ -1,4 +1,4 @@
-const handleSubmit =  async function(event){
+const handleSubmit =  function(event){
     event.preventDefault();
     let email = $(".email-login").val();
     let password = $(".password-login").val()
@@ -16,8 +16,11 @@ const handleSubmit =  async function(event){
         $message.replaceWith('<span id="message" class="has-text-danger">Something went wrong and you were not logged in. Check your email and password and your internet connection.</span>');
     })
 
+    
+
 
 }
+
 
 //checking the user's credentials
 const checkCredentials = async function(email, password) {
@@ -27,7 +30,8 @@ const checkCredentials = async function(email, password) {
         data:{
             "email":email,
             "password": password,
-        }
+        },
+        withCredentials: true
     })
 
     return result;

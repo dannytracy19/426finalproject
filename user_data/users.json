@@ -19,5 +19,11 @@
     "email": "harith@live.unc.edu",
     "password": "NikeAir976!",
     "preferences": []
+  },
+  "3": {
+    "id": 3,
+    "email": "harith@live.unc.edu",
+    "password": "hello",
+    "preferences": []
   }
 }

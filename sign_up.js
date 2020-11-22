@@ -18,7 +18,7 @@ const handleSubmit = function(event){
             "email":email,
             "password": password,
             "preferences": preferences
-        }
+        },
     })
 
     //console.log(result)
