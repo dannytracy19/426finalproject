@@ -4,6 +4,11 @@
         height: 500px;
         width: 1375px;
       }
+
+      #map {
+        height: 830px;
+        width: 1375px;
+      }
       
       /* Optional: Makes the sample page fill the window. */
       /*html,

@@ -8,6 +8,8 @@ html, body{
     font-size: 1.1em;
     background-color: #fafafa;
 }
+
+
 hr{
     background-color: #e6e6e4;
 }
@@ -29,26 +31,33 @@ hr{
     font-size: 6em !important;
     font-weight: lighter !important;
 }
+
+/*
 img {
     height: 300px !important;
     width: 300px !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
     min-width: 300px;
-    /*margin: .3em;*/
+
 }
 
 img:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     transform: scale(1.05);
+  
 }
+
+*/
+
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
   }
   
-  /* Style the buttons inside the tab */
+
+
   .tab button {
     background-color: inherit;
     float: left;
@@ -60,17 +69,17 @@ img:hover {
     font-size: 17px;
   }
   
-  /* Change background color of buttons on hover */
+  
   .tab button:hover {
     background-color: #ddd;
   }
   
-  /* Create an active/current tablink class */
+  
   .tab button.active {
     background-color: #ccc;
   }
   
-  /* Style the tab content */
+
   .tabcontent {
     display: none;
     padding: 6px 12px;
@@ -80,3 +89,4 @@ img:hover {
   input[type="radio"] {
     margin-left:10px;
 }
+

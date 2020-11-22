@@ -8,7 +8,7 @@ function initMap() {
       center: chapel_hill,
       zoom: 17,
     });
-    // Create the places service.
+    //Create the places service.
     const service = new google.maps.places.PlacesService(map);
     let getNextPage;
     const moreButton = document.getElementById("more");
