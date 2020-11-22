@@ -1,11 +1,8 @@
-
-
-
-//import axios from 'axios';
-
 const handleSubmit = function(event){
     event.preventDefault();
     let email = $(".email-input").val();
+    let password = $("#pwd").val()
+
 
 
     let preferences = []
@@ -13,22 +10,22 @@ const handleSubmit = function(event){
         preferences.push($(this).val());
     })
 
- 
-
-
-
-    //let preferences = 'meat'
-
+    //axios call to create a new user
     const result = axios({
         method: 'post',
-        url: 'http://localhost:3030/',
+        url: 'http://localhost:3030/signuppage',
         data:{
             "email":email,
+            "password": password,
             "preferences": preferences
         }
     })
 
-  window.location.href = "homepage.html";
+    //console.log(result)
+
+
+
+  //window.location.href = "homepage.html";
 
     
 }
@@ -39,8 +36,4 @@ const handleSubmit = function(event){
 
 $(function() {
     $(`button.button.is-dark.submit`).on("click", handleSubmit)
-
-
-
-
 });

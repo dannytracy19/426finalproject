@@ -19,19 +19,19 @@
                     <div class="field">
                         <label class="label">Username</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="JohnSmit101" name="username">
+                            <input class="email-login" type="text" placeholder="JohnSmit101" name="username">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control is-centered">
-                            <input class="input" type="password" placeholder="password123" name="password">
+                            <input class="password-login" type="password" placeholder="password123" name="password">
                         </div>
                     </div>
                         <div class= "container">
                             <div class="field">
                                 <div class="control">
-                                    <a class= "button is-dark" href="homepage.html">Submit</a>
+                                    <button class = "button is-dark submit" type="submit">Submit</button>
                                 </div>
                             </div>
                             <div class="field">
@@ -43,9 +43,16 @@
                         </div>
                     </div>
                 </form>
+                <span id="message">
+
+                </span>
             </div>
         </div>
     </div>
 </section>
+<!-- Links to JavaScript files below -->
+<script src="node_modules/jquery/dist/jquery.js"></script>
+<script src='index.js'></script>
+<script src="node_modules/axios/dist/axios.js"></script>
 </body>
 </html>

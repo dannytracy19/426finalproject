@@ -12,6 +12,16 @@ const bodyparser = require('body-parser');
 
 app.use(bodyparser.json());
 
+const expressSession = require('express-session');
+
+app.use(expressSession({
+    name: "SessionCookie",
+    secret: "express session secret",
+    resave: false,
+    saveUninitialized: false
+}));
+
+
 
 //request, response
 //get all books by ID
@@ -21,21 +31,59 @@ app.get('/user',(req, res) => {
 });
 
 
-app.get('/user:id', (req, res) => {
-    let u = User.findByID(req.params.id);
-    if (u==null){
-        res.status(404).send("User not found");
-        return;
+// app.get('/user:id', (req, res) => {
+//     let u = User.findByID(req.params.id);
+//     if (u==null){
+//         res.status(404).send("User not found");
+//         return;
+//     }
+//     res.json(u);
+// })
+
+
+
+const user_data = require('data-store')({ path: process.cwd() + '/user_data/users.json' });
+
+app.post('/', (req, res) => {
+    let authenticated = false;
+    console.log("checking")
+
+    let {email, password} = req.body;
+
+    //getting the users object, users_db is the users database
+    let users_db = user_data.data
+
+
+    //checking the credentials
+    for (const user in users_db){
+        const user_email = users_db[user].email;
+        const user_password = users_db[user].password;
+
+        if ((email == user_email) && (password == user_password)){
+            console.log("auth!")
+            res.send("authenticated!")
+            return;
+        }
+        
     }
-    res.json(u);
+
+    res.status(404).send("Not found");
+
+    
+
+    
+
+
+
+
 })
 
 
-app.post('/', (req, res) => {
-    let {email, preferences} = req.body;
+app.post('/signuppage', (req, res) => {
+    let {email, password, preferences} = req.body;
     console.log(req.body);
     
-    let u = User.create(email, preferences);
+    let u = User.create(email, password, preferences);
     if (u==null){
         res.status(400).send("Bad Request");
         return;
@@ -43,6 +91,8 @@ app.post('/', (req, res) => {
     return res.json(u);
 
 });
+
+//meetups
 app.post('/meetups', (req, res) => {
     let {address1, address2, meettype, stars, price} = req.body;
     console.log(req.body);
