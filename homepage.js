@@ -205,19 +205,19 @@ const handleMeetup = function(event){
     handleCreateMap(request);
 
     //let preferences = 'meat'
-/*
-    const result = axios({
-        method: 'post',
-        url: 'http://localhost:3030/meetups',
-        data:{
-            "address1": address1,
-            "address2": address2,
-            "meettype": meettype,
-            "stars": stars,
-            "price": price
-        }
-    })
-*/
+
+    // const result = axios({
+    //     method: 'post',
+    //     url: 'http://localhost:3030/meetups',
+    //     data:{
+    //         "address1": address1,
+    //         "address2": address2,
+    //         "meettype": meettype,
+    //         "stars": stars,
+    //         "price": price
+    //     }
+    // })
+
   //window.location.href = "homepage.html";
 
     let meetuppanel = 

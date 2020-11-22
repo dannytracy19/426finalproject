@@ -4,9 +4,10 @@ const axios = require('axios').default;
 
 class User {
 
-    constructor(id, email, preferences){
+    constructor(id, email, password, preferences){
         this.id = id;
         this.email = email;
+        this.password = password;
         this.preferences = preferences;
     }
 
@@ -36,11 +37,11 @@ User.next_id=User.getAllIDs().reduce((max, next_id) => {
     return max;
 }, -1) + 1;
 
-User.create = (email, preferences) => {
+User.create = (email, password, preferences) => {
     //finding max id, add 1 to it to get new id
    let id = User.next_id;
    User.next_id +=1;
-   let user = new User(id, email, preferences);
+   let user = new User(id, email, password, preferences);
    user_data.set(user.id.toString(), user);
    return user;
 }
