@@ -37,30 +37,30 @@ app.use(cors({
 
 
 
-//request, response
-//get all books by ID
+//getting session user
 app.get('/',(req, res) => {
     //console.log(session.email)
     console.log("in the get")
     console.log(req.session);
-    res.send("all good")
+    res.send(req.session.user);
     return;
 });
 
 
-// app.get('/user:id', (req, res) => {
-//     let u = User.findByID(req.params.id);
-//     if (u==null){
-//         res.status(404).send("User not found");
-//         return;
-//     }
-//     res.json(u);
-// })
+//logging out
+app.get('/logout', (req, res) => {
+    console.log(req.session)
+    delete req.session.user;
+    console.log(req.session)
+    res.send(req.session);
+})
+
 
 
 
 const user_data = require('data-store')({ path: process.cwd() + '/user_data/users.json' });
 
+//authenticate the user
 app.post('/', (req, res) => {
     let authenticated = false;
     console.log("checking")

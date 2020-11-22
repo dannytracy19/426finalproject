@@ -2,17 +2,50 @@ $(function() {
     $(`#meetup`).on("click", handleMeetup)
     $('.addfriend').on("click", handleAddFriendPanel);
     $('.addfav').on("click", handleAddFavoritePanel);
+    $('#logout').on("click", handleLogout);
 
     const result = axios({
         method: 'get',
         url: 'http://localhost:3030/',
         withCredentials: true
-    }).then(() => {
-        console.log('hello');
+    }).then((user) => {
+        let welcome_tag = 
+        //fix styline
+        `<p style="float: right;" id="welcome">Welcome, ${user.data}</p>`
+
+        $('#welcome').replaceWith(welcome_tag)
     })
+
+    //handlers for both boxes to autocomplete
+    google.maps.event.addDomListener(window, 'load', initializeFirstBox);
+    google.maps.event.addDomListener(window, 'load', initializeSecondBox);
 
 
 });
+
+const handleLogout = async function(event){
+    const result = axios({
+        method: 'get',
+        url: 'http://localhost:3030/logout',
+        withCredentials: true
+    }).then((user) => {
+        window.location.href='index.html'
+    })
+
+}
+
+//for autocomplete
+function initializeFirstBox() {
+    var input = document.getElementById('search1');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+ }
+
+ function initializeSecondBox(){
+    var input = document.getElementById('search2');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+ }
+
+
 
 const handleAddFavoritePanel = function (event){
     event.preventDefault();
@@ -137,11 +170,20 @@ const handleMeetup = async function(event){
     console.log("something");
     event.preventDefault();
 
-    let address1 = $('.streetname1').val() +",+"+$('.city1').val()+ ",+"+$('.state1').val();
+    // let address1 = $('.streetname1').val() +",+"+$('.city1').val()+ ",+"+$('.state1').val();
+    // let formatted_address1 = address1.replace(/ /g,'+')
+
+    // let address2 = $('.streetname2').val() +", "+$('.city2').val()+ ", "+$('.state2').val();
+    // let formatted_address2 = address2.replace(/ /g,'+')
+
+    let address1 = $("#search1").val()
     let formatted_address1 = address1.replace(/ /g,'+')
 
-    let address2 = $('.streetname2').val() +", "+$('.city2').val()+ ", "+$('.state2').val();
-    let formatted_address2 = address2.replace(/ /g,'+')
+    let address2 = $('#search2').val()
+    let formatted_address2 = address2.replace(/ /g, '+')
+
+
+
 
     let meettype = $('input:radio[name=meetingplace]:checked').val();
     let stars = $('input:radio[name=stars]:checked').val();
