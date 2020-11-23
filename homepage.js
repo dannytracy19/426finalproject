@@ -44,25 +44,34 @@ function initializeFirstBox() {
     var input = document.getElementById('search2');
     var autocomplete = new google.maps.places.Autocomplete(input);
  }
+ function initializeThirdBox() {
+    var input = document.getElementById('search_friend');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+ }
 
+ function initializeFourthBox(){
+    var input = document.getElementById('search_fav');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+ }
 
 
 const handleAddFavoritePanel = function (event){
     event.preventDefault();
     let addfavoritepanel = 
             `<div class = "favoritepanel">
-                <label class = "label" for = "favname">Location Name:</label>
+                <label for = "favname">Location Name:</label>
                 <input class = "favname" type = "text" name = "favname" value = "Ex: Home">
                 <br>
                 <br>
-                <label class = "label" for = "favaddress">Address:</label>
-                <input class = "favaddress" type = "text" name = "favaddress" value = "1234 Main St. Town, State Zip">
+                <label  for = "favaddress">Address:</label>
+                <input id = "search_fav"  class = "favaddress has-text-centered" type = "text" placeholder = "Type here...">
                 <br>
                 <br>
                 <button class = "createfav button is-dark">Add</button>
             </div>`
     $('.addfav').replaceWith(addfavoritepanel);
     $('.createfav').on("click", handleCreateFavorite);
+    initializeFourthBox();
 
 
 }
@@ -91,26 +100,26 @@ const handleCreateFavorite = function(event){
 }
 const handleMeetFavorite = function(event){
     let newaddress = $('.autofilladdress').attr("id");
-    $('.address1').val(event.target.id);
+    $('.city1').val(event.target.id);
 }
 
 const handleAddFriendPanel = function (event){
     event.preventDefault();
     let addfriendpanel = 
             `<div class = "friendpanel">
-                <label class = "label" for = "friendname">Name:</label>
+                <label for = "friendname">Name:</label>
                 <input class = "friendname" type = "text" name = "friendname" value = "John Doe">
                 <br>
                 <br>
-                <label class = "label" for = "friendaddress">Address:</label>
-                <input class = "friendaddress" type = "text" name = "friendaddress" value = "1234 Main St. Town, State Zip">
+                <label for = "friendaddress">Address:</label>
+                <input id = "search_friend" class = "friendaddress has-text-centered" type = "text" placeholder = "Type here...">
                 <br>
                 <br>
                 <button class = "createfriend button is-dark">Add</button>
             </div>`
     $('.addfriend').replaceWith(addfriendpanel);
     $('.createfriend').on("click", handleCreateFriend);
-
+    initializeThirdBox();
 
 }
 const handleCreateFriend = function(event){
@@ -139,7 +148,7 @@ const handleCreateFriend = function(event){
 
 const handleMeetFriend = function(event){
     let newaddress = $('.autofilladdress').attr("id");
-    $('.address2').val(event.target.id);
+    $('.city2').val(event.target.id);
 }
 
 const getMidpoint = function(lats, longs){

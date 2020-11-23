@@ -1,7 +1,10 @@
 const handleSubmit =  function(event){
+    console.log("something");
     event.preventDefault();
     let email = $(".email-login").val();
     let password = $(".password-login").val()
+    console.log(email);
+    console.log(password);
 
 
     const $message = $('#message')
@@ -39,6 +42,6 @@ const checkCredentials = async function(email, password) {
 }
 
 $(function() {
-    $(`button.button.is-dark.submit`).on("click", handleSubmit)
+    $(`.login-login`).on("click", handleSubmit)
     
 });
