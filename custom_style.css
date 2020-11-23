@@ -19,6 +19,21 @@ border-radius: 100px;
 background-color: #00ACEE;
 }
 
+.addfav{
+  border-radius: 100px;
+  padding: 15px 32px;
+  font-size: 20px;
+  color: white;
+background-color: #00ACEE;
+}
+
+.addfriend{
+  border-radius: 100px;
+  padding: 15px 32px;
+  font-size: 20px;
+  color: white;
+background-color: #00ACEE;
+}
 
 h5.subtext{
 font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
@@ -84,6 +99,11 @@ font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
 font-size: 14px;
 font-weight: bold;
 color:white;
+}
+
+h1.title{
+  color:white;
+  font-size: 45px;
 }
 
 h1.login-logo{
@@ -245,6 +265,7 @@ div{
 color: black;
 }
 
+
 section {
 color:black;
 }
@@ -254,9 +275,41 @@ color: black;
 }
 
 label {
-  color: black;
-  line-height: 30px;
+  color: white;
   text-align: center;
+  font-size:13px;
+  font-weight:bold;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+}
+
+.friend-panel{
+  color: white;
+  text-align: center;
+  font-size: 17px;
+  font-weight:bold;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+}
+
+.friend-address{
+  color: white;
+  text-align: center;
+  font-size: 13px;
+  font-weight:bold;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+}
+
+.text-box{
+  padding: 12px 50px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.add-button{
+  border-radius: 100px;
+  padding: 15px 32px;
+  font-size: 20px;
+background-color: #00ACEE;
+color: white;
 }
 
 input {
@@ -274,7 +327,7 @@ hr{
   font-style: 2em! important;
 }
 
-.justify-center .column{
+.justify-center{
   display: flex !important;
   justify-content: center !important;
 }
@@ -284,25 +337,109 @@ hr{
   font-size: 6em !important;
   font-weight: lighter !important;
 }
-img {
-  height: 300px !important;
-  width: 300px !important;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-  min-width: 300px;
-  /*margin: .3em;*/
+
+
+h5.plsenter{
+  text-align: center;
+  color: white;
+  font-size: 20px;
 }
 
-img:hover {
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-  transform: scale(1.05);
+.friend-address{
+  text-align: center;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
 }
 
+h5.submake-text{
+  text-align: center;
+  color: white;
+  font-size: 20px;
+}
 
+.your-address{
+  text-align: center;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+}
 
-.tab {
-  float: right;
-  bottom:0;
+.other-options{
+  text-align: center;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+}
+
+.your-address-box{
+  padding: 12px 50px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.friend-address-box{
+  padding: 12px 50px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.column-hi{
+  text-align: center;
+  position: relative;
+  right: -200px;
+  top: 80px;
+}
+
+.meet-button{
+  border-radius: 100px;
+  padding: 15px 32px;
+  font-size: 20px;
+  color: white;
+background-color: #00ACEE;
+}
+
+.pref-meet-place{
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+}
+
+.rating{
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+}
+
+.price-point{
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+}
+
+#vertical-line{
+  width: 10px;
+  height: 20px;
+  color: white;
+}
+
+.columns{
+  column-gap: 400px;
+  position: relative;
+  left: -27px;
+}
+
+.column{
+  position: relative;
+  right: 50px;
+  top: 66px;
+
 }
 
 /* Style the buttons inside the tab */
@@ -321,7 +458,11 @@ img:hover {
   color:white;
   font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
   font-weight: bold;
-  width: 50%;
+}
+
+.tab{
+  float: right;
+  border: solid rgb(87, 87, 87);
 }
 
 /* Change background color of buttons on hover */

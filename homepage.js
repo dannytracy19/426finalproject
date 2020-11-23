@@ -92,7 +92,7 @@ const handleCreateFavorite = function(event){
         </div>
     </div>`
     $('#Favorites').append(favorite);
-    let replacementbutton = `<button class = "addfav button is-dark" style = "margin-left: 200px; margin-top: 10px; height: 75px; display: flex-right; justify-content: space-between;">Add a Favorite</button>`
+    let replacementbutton = `<button class = "addfav">Add a Favorite</button>`
     $('.favoritepanel').replaceWith(replacementbutton);
     $('.addfav').on("click", handleAddFavoritePanel);
     $('.meetfav').on("click", handleMeetFavorite);
@@ -107,15 +107,15 @@ const handleAddFriendPanel = function (event){
     event.preventDefault();
     let addfriendpanel = 
             `<div class = "friendpanel">
-                <label for = "friendname">Name:</label>
-                <input class = "friendname" type = "text" name = "friendname" value = "John Doe">
+                <label class = "label friend-panel" for = "friendname">Name:</label>
+                <input class = "friendname text-box" type = "text" name = "friendname" value = "John Doe">
                 <br>
                 <br>
-                <label for = "friendaddress">Address:</label>
-                <input id = "search_friend" class = "friendaddress has-text-centered" type = "text" placeholder = "Type here...">
+                <label class = "label friend-address" for = "friendaddress">Address:</label>
+                <input id = "search_friend" class = "friendaddress text-box" type = "text" placeholder = "Type here...">
                 <br>
                 <br>
-                <button class = "createfriend button is-dark">Add</button>
+                <button class = "createfriend button is-dark add-button">Add</button>
             </div>`
     $('.addfriend').replaceWith(addfriendpanel);
     $('.createfriend').on("click", handleCreateFriend);
@@ -139,7 +139,7 @@ const handleCreateFriend = function(event){
         </div>
     </div>`
     $('#Friends').append(friend);
-    let replacementbutton = `<button class = "addfriend button is-dark" style = "margin-left: 250px; margin-top: 10px; height: 75px; display: flex-left; justify-content: space-between;">Add a Friend</button>`
+    let replacementbutton = `<button class = "addfriend">Add a Friend</button>`
     $('.friendpanel').replaceWith(replacementbutton);
     $('.addfriend').on("click", handleAddFriendPanel);
     $('.meetfriend').on("click", handleMeetFriend);
@@ -227,6 +227,7 @@ const handleMeetup = async function(event){
         longitudes.push(long2);
         
     })
+    console.log(latitudes);
 
     let mid_lat = getMidpoint(latitudes, longitudes)[0];
     let mid_lng = getMidpoint(latitudes, longitudes)[1];
