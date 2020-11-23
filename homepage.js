@@ -1,8 +1,42 @@
 $(function() {
+    loadHome();
+    // homepage_panel = $("#setup-meet")
+
+    // $(`#meetup`).on("click", handleMeetup)
+    // $('.addfriend').on("click", handleAddFriendPanel);
+    // $('.addfav').on("click", handleAddFavoritePanel);
+    // $('#logout').on("click", handleLogout);
+
+    
+
+    // const result = axios({
+    //     method: 'get',
+    //     url: 'http://localhost:3030/',
+    //     withCredentials: true
+    // }).then((user) => {
+    //     let welcome_tag = 
+    //     //fix styline
+    //     `<p style="float: right;" id="welcome">Welcome, ${user.data}</p>`
+
+    //     $('#welcome').replaceWith(welcome_tag)
+    // })
+
+    // //handlers for both boxes to autocomplete
+    // google.maps.event.addDomListener(window, 'load', initializeFirstBox);
+    // google.maps.event.addDomListener(window, 'load', initializeSecondBox);
+
+
+});
+
+const loadHome = async function(){
+    homepage_panel = $("#setup-meet")
+
     $(`#meetup`).on("click", handleMeetup)
     $('.addfriend').on("click", handleAddFriendPanel);
     $('.addfav').on("click", handleAddFavoritePanel);
     $('#logout').on("click", handleLogout);
+
+    
 
     const result = axios({
         method: 'get',
@@ -20,8 +54,7 @@ $(function() {
     google.maps.event.addDomListener(window, 'load', initializeFirstBox);
     google.maps.event.addDomListener(window, 'load', initializeSecondBox);
 
-
-});
+}
 
 const handleLogout = async function(event){
     const result = axios({
@@ -337,7 +370,7 @@ const handleMeetup = async function(event){
         };
     };
 
-    let map = $("<div/>", {html: `<div id="meet-map"></div>
+    let map = $("<div/>", {html: `<div id="map_div"><div id="meet-map"></div>
                             <div id="right-panel">
                             <h2>Results</h2>
                             <ul id="places"></ul>
@@ -345,7 +378,9 @@ const handleMeetup = async function(event){
                             <div id=selector>
                             <div><div id=place></div></div>
                             <div><div id=select-buttons></div</div>
+                            </div>
                             </div>`});
+
 
     $('#setup-meet').replaceWith(map);
 
@@ -472,9 +507,11 @@ function addUndoConfirmButtons(place, markers, map) {
     let newButtons = $('<div/>')
     let select = $('#select-buttons')
 
+    let backButton = $('<button id=back-to-home>Back</button>')
     let undoButton = $('<button id=undo-button>Undo</button>')
     let confirmButton = $('<button id=confirm-button>Confirm Meeting Place</button>')
     
+    newButtons.append(backButton)
     newButtons.append(undoButton)
     newButtons.append(confirmButton)
     select.replaceWith(newButtons)
@@ -488,6 +525,12 @@ function addUndoConfirmButtons(place, markers, map) {
         unhideMarkers(markers, map)
         $('#chosen-place').replaceWith('<div id=place></div>')
     })
+
+    $('#back-to-home').on("click",function(){
+        $('#map_div').replaceWith(homepage_panel);
+        loadHome();
+
+    } )
 }
 
 function hideMarkers(event, markers, map) {
