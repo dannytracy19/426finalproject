@@ -300,22 +300,6 @@ const handleMeetup = async function(event){
 
     handleCreateMap(request, mid_lat, mid_lng);
 
-    //let preferences = 'meat'
-
-    // const result = axios({
-    //     method: 'post',
-    //     url: 'http://localhost:3030/meetups',
-    //     data:{
-    //         "address1": address1,
-    //         "address2": address2,
-    //         "meettype": meettype,
-    //         "stars": stars,
-    //         "price": price
-    //     }
-    // })
-
-  //window.location.href = "homepage.html";
-
     let meetuppanel = 
         `<div class = "meetuppanel" style = "display: inline-block; border: 2px solid powderblue; width: 100%; padding: 10px;">
             <h3 class = "label">You Meet Between: </h3>
@@ -350,8 +334,7 @@ function initMap(request, mid_lat, mid_lng) {
     
     service.search(request, (results, status, pagination) => {
         if (status !== "OK") {console.log("error"); return;}
-        createMarkers(results, map);
-        //moreButton.disabled = !pagination.hasNextPage;
+        createMarkers(results, map, place);
 
         if (pagination.hasNextPage) {
         getNextPage = pagination.nextPage;
@@ -360,7 +343,7 @@ function initMap(request, mid_lat, mid_lng) {
 
 }
 
-function createMarkers(places, map) {
+function createMarkers(places, map, placeLoc) {
     const bounds = new google.maps.LatLngBounds();
     const placesList = document.getElementById("places");
 
@@ -383,7 +366,7 @@ function createMarkers(places, map) {
         }).addListener('click', (event) => { 
             hideMarkers(event, markers, map);
             addChosenPlace(event);
-            addUndoConfirmButtons(event, markers, map);
+            addUndoConfirmButtons(placeLoc, markers, map);
         });
         markers.push(marker);
 
@@ -392,20 +375,15 @@ function createMarkers(places, map) {
             hideMarkers(event, markers, map);
             addChosenPlace(event);
             addUndoConfirmButtons(event, markers, map);
-            //handleMeetingPlace(event)
         });
         
         li.textContent = place.name;
         placesList.appendChild(li);
         bounds.extend(place.geometry.location);
     }
-    //map.fitBounds(bounds);
 }
 
-function handleMeetingPlace(event, markers) {
-    $('#selector').hide()
-    $('#right-panel').hide()
-
+function handleMeetingPlace(event, place) {
     let parse_string = event[0]['innerText'].split(': ');
     let place_name = parse_string[1];
 
@@ -416,24 +394,30 @@ function handleMeetingPlace(event, markers) {
                         </div>
                         </div>`
 
-    let chosenMarker;
-    for(let i = 0; i<markers.length; i++) {
-        console.log(place_name)
-        console.log(markers[i]['j']['title'])
-        if (place_name.includes(markers[i]['j']['title'])) {
-            chosenMarker = markers[i]['j']
+    let nameArray = place_name.split(' ')
+    
+    let nameForHtml='';
+
+    for(let i = 0; i < nameArray.length - 1; i++) {
+        if (nameArray.length - 2 == i) {
+            nameForHtml += nameArray[i]
+        } else {
+            nameForHtml += nameArray[i]
+            nameForHtml += '+'
         }
     }
-    console.log(chosenMarker)
 
+    let placeLat = place['lat'];
+    let placeLng = place['lng'];
+    
     let confirmationPage = $('<div/>', {html: html_code})
     $('#meet-map').replaceWith(confirmationPage);
     $('#google-maps-button').on('click', function () {
-        console.log('going to google maps')
+       window.location.href = `https://www.google.com/maps/place/${nameForHtml}/@${placeLat},${placeLng},17z/`
     })
 }
 
-function addUndoConfirmButtons(event, markers, map) {
+function addUndoConfirmButtons(place, markers, map) {
     let newButtons = $('<div/>')
     let select = $('#select-buttons')
 
@@ -443,8 +427,12 @@ function addUndoConfirmButtons(event, markers, map) {
     newButtons.append(undoButton)
     newButtons.append(confirmButton)
     select.replaceWith(newButtons)
+
     $('#confirm-button').on('click', function() {
-        handleMeetingPlace($('#chosen-place'), markers)})
+        $('#selector').hide()
+        $('#right-panel').hide()
+        handleMeetingPlace($('#chosen-place'), place)})
+
     $('#undo-button').on('click', function() {
         unhideMarkers(markers, map)
         $('#chosen-place').replaceWith('<div id=place></div>')
