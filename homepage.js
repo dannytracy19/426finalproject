@@ -357,20 +357,7 @@ function initMap(request, mid_lat, mid_lng) {
         getNextPage = pagination.nextPage;
         }
     })
-/*
-    // Perform a nearby search.
-    service.nearbySearch(
-        { location: place, radius: 1000, type: meeting_place},
-        (results, status, pagination) => {
-            if (status !== "OK") {console.log("error"); return;}
-            createMarkers(results, map);
-            moreButton.disabled = !pagination.hasNextPage;
-    
-            if (pagination.hasNextPage) {
-            getNextPage = pagination.nextPage;
-            }
-        }
-    );*/
+
 }
 
 function createMarkers(places, map) {
@@ -415,37 +402,29 @@ function createMarkers(places, map) {
     //map.fitBounds(bounds);
 }
 
-function handleMeetingPlace(event) {
-    console.log(event);
-
+function handleMeetingPlace(event, markers) {
     $('#selector').hide()
+    $('#right-panel').hide()
 
-    let html_code;
+    let parse_string = event[0]['innerText'].split(': ');
+    let place_name = parse_string[1];
 
-    if(event['path'] == null) {
-        if(event['nb']["path"][0]['ariaLabel'] == undefined) {
-            html_code = `<div id=confirmation-page>
+    let html_code = `<div id=confirmation-page>
                         <div>
-                        <h1>Congrats you've chosen to meet your friend at ${event['nb']["path"][1]['ariaLabel']}!!!!</h1>
+                        <h1>Congrats you've chosen to meet your friend at ${place_name}</h1>
                         <button id=google-maps-button>Go to Google Maps</button>
                         </div>
                         </div>`
-        } else {
-            html_code = `<div id=confirmation-page>
-                        <div>
-                        <h1>Congrats you've chosen to meet your friend at ${event['nb']["path"][0]['ariaLabel']}</h1>
-                        <button id=google-maps-button>Go to Google Maps</button>
-                        </div>
-                        </div>`
+
+    let chosenMarker;
+    for(let i = 0; i<markers.length; i++) {
+        console.log(place_name)
+        console.log(markers[i]['j']['title'])
+        if (place_name.includes(markers[i]['j']['title'])) {
+            chosenMarker = markers[i]['j']
         }
-    } else {
-        html_code = `<div id=confirmation-page>
-                        <div>
-                        <h1>Congrats you've chosen to meet your friend at ${event["path"][0]['innerText']}</h1>
-                        <button id=google-maps-button>Go to Google Maps</button>
-                        </div>
-                        </div>`
     }
+    console.log(chosenMarker)
 
     let confirmationPage = $('<div/>', {html: html_code})
     $('#meet-map').replaceWith(confirmationPage);
@@ -464,7 +443,8 @@ function addUndoConfirmButtons(event, markers, map) {
     newButtons.append(undoButton)
     newButtons.append(confirmButton)
     select.replaceWith(newButtons)
-    $('#confirm-button').on('click', function() {handleMeetingPlace(event)})
+    $('#confirm-button').on('click', function() {
+        handleMeetingPlace($('#chosen-place'), markers)})
     $('#undo-button').on('click', function() {
         unhideMarkers(markers, map)
         $('#chosen-place').replaceWith('<div id=place></div>')
