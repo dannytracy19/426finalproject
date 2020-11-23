@@ -478,8 +478,12 @@ function handleMeetingPlace(event, place) {
 
     let html_code = `<div id=confirmation-page>
                         <div>
-                        <h1>Congrats you've chosen to meet your friend at ${place_name}</h1>
-                        <button id=google-maps-button>Go to Google Maps</button>
+                        <h5 class="plsenter" style = "float: right; margin-right: 100px;";>Congrats you've chosen to meet your friend at <strong>${place_name}</strong></h1>
+                        <br>
+                        <div style="text-align: center">
+                        <br>
+                        <button class="map-buttons"id=google-maps-button>Go to Google Maps</button>
+                        </div>
                         </div>
                         </div>`
 
