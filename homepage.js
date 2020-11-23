@@ -45,7 +45,7 @@ const loadHome = async function(){
     }).then((user) => {
         let welcome_tag = 
         //fix styline
-        `<p style="float: right;" id="welcome">Welcome, ${user.data}</p>`
+        `<h5 class="plsenter" style="float: right;" id="welcome">Welcome, ${user.data}</h5>`
 
         $('#welcome').replaceWith(welcome_tag)
     })
@@ -92,15 +92,16 @@ const handleAddFavoritePanel = function (event){
     event.preventDefault();
     let addfavoritepanel = 
             `<div class = "favoritepanel">
-                <label for = "favname">Location Name:</label>
-                <input class = "favname" type = "text" name = "favname" value = "Ex: Home">
+                <label class = "label friend-panel" for = "favname">Location Name:</label>
+                <input class = "favname text-box" type = "text" name = "favname" value = "Ex: Home">
                 <br>
                 <br>
-                <label  for = "favaddress">Address:</label>
-                <input id = "search_fav"  class = "favaddress has-text-centered" type = "text" placeholder = "Type here...">
+                <label  class = "label friend-address"for = "favaddress">Address:</label>
+                <input id = "search_fav"  class = "favaddress text-box" type = "text" placeholder = "Type here...">
                 <br>
                 <br>
-                <button class = "createfav button is-dark">Add</button>
+                <button class = "createfav button is-dark add-button">Add</button>
+                <br>
             </div>`
     $('.addfav').replaceWith(addfavoritepanel);
     $('.createfav').on("click", handleCreateFavorite);
@@ -125,7 +126,7 @@ const handleCreateFavorite = function(event){
         </div>
     </div>`
     $('#Favorites').append(favorite);
-    let replacementbutton = `<button class = "addfav button is-dark" style = "margin-left: 200px; margin-top: 10px; height: 75px; display: flex-right; justify-content: space-between;">Add a Favorite</button>`
+    let replacementbutton = `<button class = "addfav">Add a Favorite</button>`
     $('.favoritepanel').replaceWith(replacementbutton);
     $('.addfav').on("click", handleAddFavoritePanel);
     $('.meetfav').on("click", handleMeetFavorite);
@@ -140,15 +141,16 @@ const handleAddFriendPanel = function (event){
     event.preventDefault();
     let addfriendpanel = 
             `<div class = "friendpanel">
-                <label for = "friendname">Name:</label>
-                <input class = "friendname" type = "text" name = "friendname" value = "John Doe">
+                <label class = "label friend-panel" for = "friendname">Name:</label>
+                <input class = "friendname text-box" type = "text" name = "friendname" value = "John Doe">
                 <br>
                 <br>
-                <label for = "friendaddress">Address:</label>
-                <input id = "search_friend" class = "friendaddress has-text-centered" type = "text" placeholder = "Type here...">
+                <label class = "label friend-address" for = "friendaddress">Address:</label>
+                <input id = "search_friend" class = "friendaddress text-box" type = "text" placeholder = "Type here...">
                 <br>
                 <br>
-                <button class = "createfriend button is-dark">Add</button>
+                <button class = "createfriend button is-dark add-button">Add</button>
+                <br>
             </div>`
     $('.addfriend').replaceWith(addfriendpanel);
     $('.createfriend').on("click", handleCreateFriend);
@@ -172,7 +174,7 @@ const handleCreateFriend = function(event){
         </div>
     </div>`
     $('#Friends').append(friend);
-    let replacementbutton = `<button class = "addfriend button is-dark" style = "margin-left: 250px; margin-top: 10px; height: 75px; display: flex-left; justify-content: space-between;">Add a Friend</button>`
+    let replacementbutton = `<button class = "addfriend">Add a Friend</button>`
     $('.friendpanel').replaceWith(replacementbutton);
     $('.addfriend').on("click", handleAddFriendPanel);
     $('.meetfriend').on("click", handleMeetFriend);
@@ -260,6 +262,7 @@ const handleMeetup = async function(event){
         longitudes.push(long2);
         
     })
+    console.log(latitudes);
 
     let mid_lat = getMidpoint(latitudes, longitudes)[0];
     let mid_lng = getMidpoint(latitudes, longitudes)[1];
@@ -507,9 +510,9 @@ function addUndoConfirmButtons(place, markers, map) {
     let newButtons = $('<div/>')
     let select = $('#select-buttons')
 
-    let backButton = $('<button id=back-to-home>Back</button>')
-    let undoButton = $('<button id=undo-button>Undo</button>')
-    let confirmButton = $('<button id=confirm-button>Confirm Meeting Place</button>')
+    let backButton = $('<button class="map-buttons" id=back-to-home>Back</button>')
+    let undoButton = $('<button class="map-buttons" id=undo-button>Undo</button>')
+    let confirmButton = $('<button class="map-buttons" id=confirm-button>Confirm Meeting Place</button>')
     
     newButtons.append(backButton)
     newButtons.append(undoButton)
@@ -568,12 +571,12 @@ function addChosenPlace(event) {
     let chosenPlace;
     if(event['path'] == null) {
         if(event['nb']["path"][0]['ariaLabel'] == undefined) {
-            chosenPlace = $(`<p id=chosen-place>You have chosen: ${event['nb']["path"][1]['ariaLabel']} </p>`)
+            chosenPlace = $(`<h5 class="plsenter" id=chosen-place>You have chosen: ${event['nb']["path"][1]['ariaLabel']} </h5>`)
         } else {
-            chosenPlace = $(`<p id=chosen-place>You have chosen: ${event['nb']["path"][0]['ariaLabel']} </p>`)
+            chosenPlace = $(`<h5 class="plsenter" id=chosen-place>You have chosen: ${event['nb']["path"][0]['ariaLabel']} </h5>`)
         }
     } else {
-        chosenPlace = $(`<p id=chosen-place>You have chosen: ${event["path"][0]['innerText']}</p>`);
+        chosenPlace = $(`<h5 class="plsenter" id=chosen-place>You have chosen: ${event["path"][0]['innerText']}</h5>`);
     }
     newButtons.append(chosenPlace)
     select.replaceWith(newButtons)

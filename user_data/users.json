@@ -40,5 +40,11 @@
       "Pizza",
       "FastFood"
     ]
+  },
+  "6": {
+    "id": 6,
+    "email": "harith@live.unc.edu",
+    "password": "NikeAir976!",
+    "preferences": []
   }
 }
