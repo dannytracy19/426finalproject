@@ -167,7 +167,6 @@ const getMidpoint = function(lats, longs){
 }
 
 const handleMeetup = async function(event){
-    console.log("something");
     event.preventDefault();
 
     // let address1 = $('.streetname1').val() +",+"+$('.city1').val()+ ",+"+$('.state1').val();
@@ -220,26 +219,19 @@ const handleMeetup = async function(event){
         
     })
 
-    
-
-  
-
     let mid_lat = getMidpoint(latitudes, longitudes)[0];
     let mid_lng = getMidpoint(latitudes, longitudes)[1];
 
-    // console.log(lat);
-    // console.log(lng);
-
-
-
     let request;
+
+    //create request for the meetup and the api to handle
 
     if(meettype == "Restaurant") {
         if (stars <= 1.5) {
             request = {
                 location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
-                keyword: 'food',
+                keyword: 'cheap food',
                 type: 'restaraunt',
                 rating: 1.0
             };
@@ -247,7 +239,7 @@ const handleMeetup = async function(event){
             request = {
                 location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
-                keyword: 'food',
+                keyword: 'cheap food',
                 type: 'restaraunt',
                 rating: 2.0
             };
@@ -261,11 +253,11 @@ const handleMeetup = async function(event){
                 rating: 3.0,
                 price_level: 3,
             };
-        } else if (stars > 3.51 && stars <4.5) {
+        } else if (stars > 3.51 && stars <4.3) {
             request = {
                 location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
-                keyword: 'food',
+                keyword: 'quality food',
                 type: 'restaraunt',
                 rating: 4.0
             };
@@ -273,7 +265,7 @@ const handleMeetup = async function(event){
             request = {
                 location: new google.maps.LatLng(mid_lat, mid_lng),
                 radius: 1000,
-                keyword: 'food',
+                keyword: 'expensive food',
                 type: 'restaraunt',
                 rating: 5.0
             };
@@ -285,13 +277,33 @@ const handleMeetup = async function(event){
             keyword: 'shopping',
             type: "shopping_mall"
         };
-    } else if(meettype == "Retail Shop") {
-        request = {
-            location: new google.maps.LatLng(mid_lat, mid_lng),
-            radius: 1000,
-            keyword: 'shopping',
-            type: "store"
-        };
+    } else if(meettype == "Retail") {
+        if (stars <= 2.5 || price == '$' || (stars <=3.25 && price == '$$')) {
+            request = {
+                location: new google.maps.LatLng(mid_lat, mid_lng),
+                radius: 1000,
+                keyword: 'cheap shopping',
+                type: "store",
+                price_level: 4
+            };
+        } else if ((stars == 4 && price == '$$') || (stars == 5 && price == '$$' )) {
+            request = {
+                location: new google.maps.LatLng(mid_lat, mid_lng),
+                radius: 1000,
+                keyword: 'quality shopping',
+                type: "store",
+                price_level: 4
+            };
+        } else {
+            request = {
+                location: new google.maps.LatLng(mid_lat, mid_lng),
+                radius: 1000,
+                keyword: 'expensive shopping',
+                type: "store",
+                price_level: 4
+            };
+        }
+        
     } else if(meettype == "Recreation") {
         request = {
             location: new google.maps.LatLng(mid_lat, mid_lng),
@@ -307,6 +319,7 @@ const handleMeetup = async function(event){
             type: "movie_theatre"
         };
     } else {
+        console.log('edge case')
         request = {
             location: new google.maps.LatLng(mid_lat, mid_lng),
             radius: 1000,
@@ -319,27 +332,15 @@ const handleMeetup = async function(event){
                             <div id="right-panel">
                             <h2>Results</h2>
                             <ul id="places"></ul>
+                            </div>
+                            <div id=selector>
+                            <div><div id=place></div></div>
+                            <div><div id=select-buttons></div</div>
                             </div>`});
 
     $('#setup-meet').replaceWith(map);
 
     handleCreateMap(request, mid_lat, mid_lng);
-
-    //let preferences = 'meat'
-
-    // const result = axios({
-    //     method: 'post',
-    //     url: 'http://localhost:3030/meetups',
-    //     data:{
-    //         "address1": address1,
-    //         "address2": address2,
-    //         "meettype": meettype,
-    //         "stars": stars,
-    //         "price": price
-    //     }
-    // })
-
-  //window.location.href = "homepage.html";
 
     let meetuppanel = 
         `<div class = "meetuppanel" style = "display: inline-block; border: 2px solid powderblue; width: 100%; padding: 10px;">
@@ -361,112 +362,167 @@ const handleCreateMap = function(meeting_place, mid_lat, mid_lng){
 
 function initMap(request, mid_lat, mid_lng) {
     // Create the map.
-    const chapel_hill = { lat: mid_lat, lng: mid_lng };
+    const place = { lat: mid_lat, lng: mid_lng };
     
     const map = new google.maps.Map(document.getElementById("meet-map"), {
-        center: chapel_hill,
+        center: place,
         zoom: 15,
         clickableIcons: false,
     });
 
-    console.log(request)
     // Create the places service.
     const service = new google.maps.places.PlacesService(map);
     let getNextPage;
-    //const moreButton = document.getElementById("more");
-  
-    /*moreButton.onclick = function () {
-        moreButton.disabled = true;
     
-        if (getNextPage) {
-            getNextPage();
-        }
-    };*/
-
-    service.search({location: new google.maps.LatLng(mid_lat, mid_lng),
-                    radius: 1000, rating: 5,}, (results) => {console.log(results)})
-
     service.search(request, (results, status, pagination) => {
         if (status !== "OK") {console.log("error"); return;}
-        createMarkers(results, map);
-        //moreButton.disabled = !pagination.hasNextPage;
+        createMarkers(results, map, place);
 
         if (pagination.hasNextPage) {
         getNextPage = pagination.nextPage;
         }
     })
-/*
-    // Perform a nearby search.
-    service.nearbySearch(
-        { location: chapel_hill, radius: 1000, type: meeting_place},
-        (results, status, pagination) => {
-            if (status !== "OK") {console.log("error"); return;}
-            createMarkers(results, map);
-            moreButton.disabled = !pagination.hasNextPage;
-    
-            if (pagination.hasNextPage) {
-            getNextPage = pagination.nextPage;
-            }
-        }
-    );*/
+
 }
 
-function createMarkers(places, map) {
+function createMarkers(places, map, placeLoc) {
     const bounds = new google.maps.LatLngBounds();
     const placesList = document.getElementById("places");
 
     let markers = []
 
     for (let i = 0, place; (place = places[i]); i++) {
-        //console.log(place)
         const image = {
-            url: 'solid_blue.png',
-            size: new google.maps.Size(15, 15),
-            //origin: new google.maps.Point(5, 5),
-            //anchor: new google.maps.Point(10, 10),
-            scaledSize: new google.maps.Size(5, 5),
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25),
         };
 
         let marker = new google.maps.Marker({
-            map,
+            map: map,
             icon: image,
             title: place.name,
             position: place.geometry.location,
-        }).addListener('click', () => { handleMeetingPlace(event["path"][1]['title'])});
+        }).addListener('click', (event) => { 
+            hideMarkers(event, markers, map);
+            addChosenPlace(event);
+            addUndoConfirmButtons(placeLoc, markers, map);
+        });
         markers.push(marker);
 
         const li = document.createElement("li");
         li.addEventListener('click', (event) => { 
-            // let solo_marker;
-            // let mark = ''
-            // console.log(event)
-            // for(let h = 0; markers.length; h++) {
-            //     //mark = markers[h]['j']['title']
-                
-            //     if(event['path'][0]['innerText'] == mark) {
-            //         solo_marker = markers[h];
-            //     }
-            //     //markers[h].setMap(null)
-            // }
-            // handleFindOnMap(solo_marker, map)
-            handleMeetingPlace(event)});
+            hideMarkers(event, markers, map);
+            addChosenPlace(event);
+            addUndoConfirmButtons(event, markers, map);
+        });
         
         li.textContent = place.name;
         placesList.appendChild(li);
         bounds.extend(place.geometry.location);
     }
-    //map.fitBounds(bounds);
 }
 
-function handleMeetingPlace(place_name) {
-    console.log(place_name);
+function handleMeetingPlace(event, place) {
+    let parse_string = event[0]['innerText'].split(': ');
+    let place_name = parse_string[1];
+
+    let html_code = `<div id=confirmation-page>
+                        <div>
+                        <h1>Congrats you've chosen to meet your friend at ${place_name}</h1>
+                        <button id=google-maps-button>Go to Google Maps</button>
+                        </div>
+                        </div>`
+
+    let nameArray = place_name.split(' ')
+    
+    let nameForHtml='';
+
+    for(let i = 0; i < nameArray.length - 1; i++) {
+        if (nameArray.length - 2 == i) {
+            nameForHtml += nameArray[i]
+        } else {
+            nameForHtml += nameArray[i]
+            nameForHtml += '+'
+        }
+    }
+
+    let placeLat = place['lat'];
+    let placeLng = place['lng'];
+    
+    let confirmationPage = $('<div/>', {html: html_code})
+    $('#meet-map').replaceWith(confirmationPage);
+    $('#google-maps-button').on('click', function () {
+       window.location.href = `https://www.google.com/maps/place/${nameForHtml}/@${placeLat},${placeLng},17z/`
+    })
 }
 
-function handleFindOnMap(marker, map) {
-    new google.maps.Marker({
-        map,
-        icon: marker['icon'],
-        title: marker['title'],
-        position: marker['position'],
-    }).addListener('click', () => { handleMeetingPlace(event["path"][1]['title'])});
+function addUndoConfirmButtons(place, markers, map) {
+    let newButtons = $('<div/>')
+    let select = $('#select-buttons')
+
+    let undoButton = $('<button id=undo-button>Undo</button>')
+    let confirmButton = $('<button id=confirm-button>Confirm Meeting Place</button>')
+    
+    newButtons.append(undoButton)
+    newButtons.append(confirmButton)
+    select.replaceWith(newButtons)
+
+    $('#confirm-button').on('click', function() {
+        $('#selector').hide()
+        $('#right-panel').hide()
+        handleMeetingPlace($('#chosen-place'), place)})
+
+    $('#undo-button').on('click', function() {
+        unhideMarkers(markers, map)
+        $('#chosen-place').replaceWith('<div id=place></div>')
+    })
+}
+
+function hideMarkers(event, markers, map) {
+    if(event['path'] == null) {
+        for(let i = 0; i < markers.length; i++) {
+            markers[i]['j'].setMap(null)
+        }
+        for(let i = 0; i < markers.length; i++) {
+            if (event['nb']["path"][1]['ariaLabel'] == markers[i]['j']['title'] || event['nb']["path"][0]['ariaLabel'] == markers[i]['j']['title']) {
+                markers[i]['j'].setMap(map)
+            }
+        }
+    
+    } else {
+        for(let i = 0; i < markers.length; i++) {
+            markers[i]['j'].setMap(null)
+        }
+        for(let i = 0; i < markers.length; i++) {
+            if (event["path"][0]['innerText'] == markers[i]['j']['title']) {
+                markers[i]['j'].setMap(map)
+            }
+        }
+    }
+}
+
+function unhideMarkers (markers, map) {
+    for(let i = 0; i < markers.length; i++) {
+        markers[i]['j'].setMap(map);
+    }
+}
+
+function addChosenPlace(event) {
+    let newButtons = $('<div/>')
+    let select = $('#place')
+    let chosenPlace;
+    if(event['path'] == null) {
+        if(event['nb']["path"][0]['ariaLabel'] == undefined) {
+            chosenPlace = $(`<p id=chosen-place>You have chosen: ${event['nb']["path"][1]['ariaLabel']} </p>`)
+        } else {
+            chosenPlace = $(`<p id=chosen-place>You have chosen: ${event['nb']["path"][0]['ariaLabel']} </p>`)
+        }
+    } else {
+        chosenPlace = $(`<p id=chosen-place>You have chosen: ${event["path"][0]['innerText']}</p>`);
+    }
+    newButtons.append(chosenPlace)
+    select.replaceWith(newButtons)
 }
